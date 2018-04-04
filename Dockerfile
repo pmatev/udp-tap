@@ -5,4 +5,5 @@ RUN npm install
 
 COPY listen.js .
 
-ENTRYPOINT ["node", "listen.js"]
+ENTRYPOINT ["node"]
+CMD ["listen.js"]

@@ -46,5 +46,13 @@ server.on('listening', () => {
   console.log(`proxying to ${program.args}`);
 });
 
+function shutdown(signal) {
+  console.log(`Received ${signal}`);
+  server.close();
+}
+
+process.on('SIGINT', shutdown);
+process.on('SIGTERM', shutdown);
+
 const host = splitAddress(program.host)
 server.bind(host.port, host.host);

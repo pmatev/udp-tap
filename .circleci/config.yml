@@ -1,0 +1,42 @@
+defaults: &defaults
+  docker:
+    - image: deliveroo/circleci:0.1.14
+
+version: 2
+
+jobs:
+  build_and_push:
+    <<: *defaults
+
+    steps:
+      - setup_remote_docker:
+          reusable: true
+          version: 17.05.0-ce
+
+      - checkout
+
+      - run:
+          name: Build production image
+          command: |
+            set -ex
+            docker build -t deliveroo/udp-tap:${CIRCLE_SHA1} .
+
+      - run:
+          name: Log in to Docker repository
+          command: docker login -u ${DOCKER_USER} -p ${DOCKER_PASS}
+
+      - run:
+          name: Push the image
+          command: |
+            set -ex
+            docker push deliveroo/udp-tap:${CIRCLE_SHA1}
+
+workflows:
+  version: 2
+  test:
+    jobs:
+      - build_and_push:
+          filters:
+            branches:
+              only:
+                - master
