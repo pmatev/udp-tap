@@ -42,7 +42,8 @@ server.on('message', (msg, rinfo) => {
 
 server.on('listening', () => {
   const address = server.address();
-  console.log(`server listening ${address.address}:${address.port}`);
+  console.log(`listening on ${address.address}:${address.port}`);
+  console.log(`proxying to ${program.args}`);
 });
 
 const host = splitAddress(program.host)
