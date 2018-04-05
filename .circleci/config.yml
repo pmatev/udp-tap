@@ -19,7 +19,7 @@ jobs:
           name: Build production image
           command: |
             set -ex
-            docker build -t deliveroo/udp-tap:${CIRCLE_SHA1} .
+            docker build -t deliveroo/udp-tap:latest .
 
       - run:
           name: Log in to Docker repository
@@ -29,7 +29,7 @@ jobs:
           name: Push the image
           command: |
             set -ex
-            docker push deliveroo/udp-tap:${CIRCLE_SHA1}
+            docker push deliveroo/udp-tap:latest
 
 workflows:
   version: 2
