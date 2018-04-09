@@ -33,8 +33,6 @@ const getAddress = (addr) => {
     });
   }).then(name => {
     return { orig_host: host, host: name, port };
-  }).catch(err => {
-    console.error(`cannot resolve ${addr}`, err);
   });
 };
 
@@ -43,7 +41,8 @@ const getDestinations = () => {
 };
 
 function shutdown(signal) {
-  console.log(`Received ${signal}`);
+  if (signal) console.log(`Received ${signal}`);
+  console.log('shutting down...');
   server.close();
 }
 
@@ -52,7 +51,7 @@ process.on('SIGTERM', shutdown);
 
 Promise.all([getAddress(program.host), getDestinations()]).then(values => {
   const [host, destinations] = values;
-
+  console.log(host, destinations)
   server.bind(host.port, host.host);
   const displayDestinations = destinations.map(d => `${d.host}:${d.port}`);
   console.log(`proxying to ${displayDestinations}`);
@@ -75,4 +74,7 @@ Promise.all([getAddress(program.host), getDestinations()]).then(values => {
     const address = server.address();
     console.log(`listening on ${address.address}:${address.port}`);
   });
+}).catch(err => {
+  console.error(err.message);
+  shutdown();
 });
