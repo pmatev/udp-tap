@@ -1,6 +1,6 @@
 defaults: &defaults
   docker:
-    - image: deliveroo/circleci:0.1.14
+    - image: deliveroo/circleci:latest
 
 version: 2
 
